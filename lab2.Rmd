@@ -16,16 +16,26 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+
+## filtlong installation
+
+code to install filtlong
+
+```{bash, eval=FALSE}
+conda create -n filtlong_env -c bioconda filtlong
 ```
 
-## Including Plots
+## Run filtlong on yeast genome
 
-You can also embed plots, for example:
+filtlong bash tool is used to filter the long reads based on certain criteria such as average Q score
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{bash, eval=FALSE}
+filtlong --keep_percent 75 data/ERR1539006.fastq.gz > outputs/filtlong_filtered_reads.fastq
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Run sequali on filtered genome
+
+```{bash, eval=FALSE}
+sequali outputs/filtlong_filtered_reads.fastq --outdir outputs
+```
+
