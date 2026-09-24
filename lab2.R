@@ -156,7 +156,9 @@ qPerBase1 = as(quality(fq1), "matrix")
 qPerBase2 = as(quality(fq2), "matrix")
 
 # Get number of bases per read that have quality score below 20
-# We use this
+q1 <- qPerBase1[1, ]
+rev(q1)
+
 
 
 # number of reads where all phred scores

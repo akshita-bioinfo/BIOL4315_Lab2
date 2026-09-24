@@ -3,5 +3,5 @@
 .RData
 .Ruserdata
 data\
-*.fastq
-*.fastq.gz
+outputs/*.fastq
+outputs/*.fastq.gz
