@@ -17,7 +17,7 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 
-## filtlong installation
+## 3. filtlong installation
 
 code to install filtlong
 
@@ -25,7 +25,7 @@ code to install filtlong
 conda create -n filtlong_env -c bioconda filtlong
 ```
 
-## Run filtlong on yeast genome
+## 4. Run filtlong on yeast genome
 
 filtlong bash tool is used to filter the long reads based on certain criteria such as average Q score
 
@@ -33,13 +33,35 @@ filtlong bash tool is used to filter the long reads based on certain criteria su
 filtlong --keep_percent 75 data/ERR1539006.fastq.gz > outputs/filtlong_filtered_reads.fastq
 ```
 
-## Run sequali on filtered genome
+## 5. Run sequali on filtered file
 
 ```{bash}
 sequali outputs/filtlong_filtered_reads.fastq --outdir outputs
 ```
 
-## R code chunk 
+## 6. Description of how results changed after filtration
+### Sanity check points prior filtration:
+1. N50 is 8078 bp
+2. From sequence length distribution, we can say that about 75% of reads are longer than 3499 bp. Thus, most reads are longer than 2000 bp
+3. Read length histogram is unimodal (major peak around 5000 - 8000 bp) & broad (read lengths are widely distributed)
+4. Average q score is less than 7, which means quality depletion. Only 22.71 % of reads have q score greater than 7, while 11.13 % of reads have q score greater than 10
+5. From per position quality percentiles approximation, we can say that base quality levels remain stable around phred score of 30 with score dropping down to 20 beyond position 14000
+
+### Sanity check points post filtration:
+1. N50 is 8816 bp
+2. From sequence length distribution, we can say almost all reads are longer than 2000 bp
+3. Read length histogram is bimodal (two peaks: one around 6624 - 6691 bp while other around 8853 - 9290 bp)
+4. Q score improved a little after filtration. Now, 36.42 % of reads have q score greater than 7, while 18.76 % of reads have q score greater than 10
+5. From per position quality percentiles approximation, we can say that base quality levels remain stable around phred score of 30 with score dropping down to 20 beyond position 12000
+
+Sequencing run is not of very good quality as average q score is less than 7. Also, we can not use it for the downstream analysis as it is required to trim the ends of reads before performing any downstream analysis on it.
+
+## 8. Download the illumina reads of a Campilobacter jejuni genome sequencing 
+To do so, run the following in R terminal
+wget -nc -P data/ ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR112/040/ERR11203340/ERR11203340_1.fastq.gz
+wget -nc -P data/ ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR112/040/ERR11203340/ERR11203340_2.fastq.gz
+
+## 9. R code chunk
 
 rqc tool performs quality check on short read files
 
@@ -47,7 +69,7 @@ rqc tool performs quality check on short read files
 qcres <- rqc(path = "data/", pattern = "^ERR11203340_.*\\.fastq\\.gz$", pair = c(1,1), openBrowser=FALSE, outdir="outputs")
 ```
 
-# Sequencing quality per base/cycle
+## Sequencing quality per base/cycle
 
 quality score drops below 2 at cycle 101
 
@@ -55,17 +77,17 @@ quality score drops below 2 at cycle 101
 rqcCycleQualityBoxPlot(qcres)
 ```
 
-# Sequence content per base/cycle
+## Sequence content per base/cycle
 
-Highest proportion for Ns is 0% because the line for N sits completely flat at the bottom of the grass across all the cycles
+Highest proportion for Ns is 0% because the line for N sits completely flat at the bottom of the graph across all the cycles
 
 ```{r}
 rqcCycleBaseCallsLinePlot(qcres)
 ```
 
-# Read frequency plot
+## Read frequency plot
 
-Most of the sequences do not have more than 1 read because bars for 1 occurrence are approximately at 100%
+Most of the sequences (about more than 40%) have 1 read, which means they are unique. Only small proportion of sequences are not unique.
 
 ```{r}
 rqcReadFrequencyPlot(qcres)

@@ -1,6 +1,6 @@
-# BIOL4315 lab 2
+# BIOL4315_Lab2 = Quality Check, Processing & Alignment
 
-#install packages
+# install packages
 install.packages("BiocManager")
 BiocManager::install("Rqc")
 BiocManager::install("quasr")
@@ -145,20 +145,3 @@ rqcCycleBaseCallsLinePlot(qcres)
 # Read frequency plot
 rqcReadFrequencyPlot(qcres)
 
-# Trim the reads based on the quality scores. trim bases from the 3' end inwards that have Q score <20
-
-# read fastq files
-fq1 = readFastq("data/ERR11203340_1.fastq.gz")
-fq2 = readFastq("data/ERR11203340_2.fastq.gz")
-
-# Get quality scores per base as a matrix
-qPerBase1 = as(quality(fq1), "matrix")
-qPerBase2 = as(quality(fq2), "matrix")
-
-# Get number of bases per read that have quality score below 20
-q1 <- qPerBase1[1, ]
-rev(q1)
-
-
-
-# number of reads where all phred scores
