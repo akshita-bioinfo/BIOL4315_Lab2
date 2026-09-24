@@ -4,4 +4,6 @@
 .Ruserdata
 data/
 *.fastq
-*.fastq.gz
+*.fastq.gz*.json
+.RDataTmp
+.DS_Store
