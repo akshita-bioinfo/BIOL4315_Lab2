@@ -21,7 +21,7 @@ When you click the **Knit** button a document will be generated that includes bo
 
 code to install filtlong
 
-```{bash, eval=FALSE}
+```{bash}
 conda create -n filtlong_env -c bioconda filtlong
 ```
 
@@ -29,13 +29,45 @@ conda create -n filtlong_env -c bioconda filtlong
 
 filtlong bash tool is used to filter the long reads based on certain criteria such as average Q score
 
-```{bash, eval=FALSE}
+```{bash}
 filtlong --keep_percent 75 data/ERR1539006.fastq.gz > outputs/filtlong_filtered_reads.fastq
 ```
 
 ## Run sequali on filtered genome
 
-```{bash, eval=FALSE}
+```{bash}
 sequali outputs/filtlong_filtered_reads.fastq --outdir outputs
+```
+
+## R code chunk 
+
+rqc tool performs quality check on short read files
+
+```{r}
+qcres <- rqc(path = "data/", pattern = "^ERR11203340_.*\\.fastq\\.gz$", pair = c(1,1), openBrowser=FALSE, outdir="outputs")
+```
+
+# Sequencing quality per base/cycle
+
+quality score drops below 2 at cycle 101
+
+```{r}
+rqcCycleQualityBoxPlot(qcres)
+```
+
+# Sequence content per base/cycle
+
+Highest proportion for Ns is 0% because the line for N sits completely flat at the bottom of the grass across all the cycles
+
+```{r}
+rqcCycleBaseCallsLinePlot(qcres)
+```
+
+# Read frequency plot
+
+Most of the sequences do not have more than 1 read because bars for 1 occurrence are approximately at 100%
+
+```{r}
+rqcReadFrequencyPlot(qcres)
 ```
 

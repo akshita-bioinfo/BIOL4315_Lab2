@@ -130,3 +130,33 @@ while(length(fq <- yield(f))) {
              here::here("outputs", paste(basename(fastqFile), "Qfiltered3.fastq", sep="_")), 
              mode="a", compress = FALSE)
 }
+
+# Take Illumina reads from Q8 and run rqc() function
+
+# Feeds fastq.qz files to quality check function
+qcres <- rqc(path = "data/", pattern = "^ERR11203340_.*\\.fastq\\.gz$", pair = c(1,1), openBrowser=FALSE, outdir="outputs")
+
+# Sequencing quality per base/cycle
+rqcCycleQualityBoxPlot(qcres)
+
+# Sequence content per base/cycle
+rqcCycleBaseCallsLinePlot(qcres)
+
+# Read frequency plot
+rqcReadFrequencyPlot(qcres)
+
+# Trim the reads based on the quality scores. trim bases from the 3' end inwards that have Q score <20
+
+# read fastq files
+fq1 = readFastq("data/ERR11203340_1.fastq.gz")
+fq2 = readFastq("data/ERR11203340_2.fastq.gz")
+
+# Get quality scores per base as a matrix
+qPerBase1 = as(quality(fq1), "matrix")
+qPerBase2 = as(quality(fq2), "matrix")
+
+# Get number of bases per read that have quality score below 20
+# We use this
+
+
+# number of reads where all phred scores
