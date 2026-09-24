@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-data\
-outputs/*.fastq
-outputs/*.fastq.gz
+data/
+outputs/
+*.fastq
+*.fastq.gz
